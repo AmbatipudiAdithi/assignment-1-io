@@ -1,5 +1,6 @@
+import 'package:bmi_calculator/SecondPage.dart';
 import 'package:flutter/material.dart';
-
+import 'package:bmi_calculator/SecondPage.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -33,13 +34,14 @@ class _MyHomePageState extends State<MyHomePage> {
   });}
   double height = 100;
   var BMI=(((60*10000/(100*100))*100).roundToDouble())/100;
-  void calculateBMI(){
+  double calculateBMI(){
     setState(() {
       BMI=x*10000/(height*height);
       BMI=BMI*100;
       BMI=BMI.roundToDouble();
       BMI=BMI/100;
     });
+    return BMI;
   }
 
   @override
@@ -63,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
             width: 400,
             color: Colors.cyanAccent,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                     "Height (in cm) : ${height.round()}",
@@ -98,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     style: ButtonStyle(
                         padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(15)),
-                        foregroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                        foregroundColor: MaterialStateProperty.all<Color>(Colors.deepPurple),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18.0),
@@ -125,12 +127,30 @@ class _MyHomePageState extends State<MyHomePage> {
                         )
                     ),
                     onPressed:add_inc,
+
                 ),
                 Text(x.toString())
               ]
           ),
-          ElevatedButton(onPressed:calculateBMI, child: Text("Calulate BMI:",style: TextStyle(fontSize: 20))),
-          Text("BMI: "+BMI.toString(), style: TextStyle(fontSize: 40),)
+          GestureDetector(
+            onTap: () {
+              double bmi = calculateBMI();
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> secondPage(bmi: bmi)));
+              setState(() {
+                calculateBMI();
+                print(BMI);
+              });
+            },
+            child: Text("Calculate BMI",
+              style: TextStyle(fontSize: 30,
+              ),
+
+            ),
+          ),
+          //ElevatedButton(onPressed:calculateBMI, child: Text("Calulate BMI:",style: TextStyle(fontSize: 20))),
+          Container(
+              height: 100,width: 200,
+              child: Text("BMI: "+BMI.toString(),style: TextStyle(fontSize: 30),))
         ],
       ),
     );
